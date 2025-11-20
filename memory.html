@@ -59,17 +59,6 @@
         .heart::before { top: -10px; left: 0; }
         .heart::after { top: 0; left: 10px; }
         
-        .typewriter {
-            overflow: hidden;
-            border-right: 3px solid rgba(255, 255, 255, 0.8);
-            white-space: nowrap;
-            margin: 0 auto;
-            animation: typing 3s steps(40, end), blink-caret 0.8s infinite;
-        }
-        
-        @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: rgba(255, 255, 255, 0.8); } }
-        
         .fade-out { animation: fadeOut 0.7s ease-out forwards; }
         @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
@@ -105,7 +94,7 @@
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
-            height: 450px;
+            height: 500px; /* Increased height slightly */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -122,7 +111,7 @@
         
         .carousel-item {
             flex: 0 0 300px;
-            height: 400px;
+            height: 450px; /* Taller card to fit text box comfortably */
             border-radius: 20px;
             overflow: hidden;
             position: relative;
@@ -152,9 +141,51 @@
             filter: blur(0);
             box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
         }
-        
-        /* CSS for carousel caption on photo removed here */
-        
+
+        /* NEW: Scrollable Caption Box Styles */
+        .caption-box {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%; /* Takes up bottom 40% of card */
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            padding: 15px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            transform: translateY(110%); /* Hidden by default (pushed down) */
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease;
+            overflow-y: auto; /* Enables vertical scrolling */
+            opacity: 0;
+            color: #333;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Show caption box only when active */
+        .carousel-item.active .caption-box {
+            transform: translateY(0); /* Slides up */
+            opacity: 1;
+        }
+
+        /* Custom Pink Scrollbar for the caption box */
+        .caption-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .caption-box::-webkit-scrollbar-track {
+            background: rgba(255, 192, 203, 0.3);
+            border-radius: 3px;
+        }
+        .caption-box::-webkit-scrollbar-thumb {
+            background: #ff69b4;
+            border-radius: 3px;
+        }
+        .caption-box::-webkit-scrollbar-thumb:hover {
+            background: #ff1493;
+        }
+
         .slide-in { animation: slideIn 0.8s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -195,11 +226,7 @@
             <div class="carousel-track" id="carouselTrack"></div>
         </div>
         
-        <div class="mt-8 h-16 flex items-center justify-center">
-            <p id="typewriterText" class="text-xl md:text-2xl text-gray-700 font-medium text-center max-w-md"></p>
-        </div>
-        
-        <button id="downloadBtn" class="download-btn text-white px-8 py-3 rounded-full font-semibold text-lg mt-6 hidden shadow-lg">
+        <button id="downloadBtn" class="download-btn text-white px-8 py-3 rounded-full font-semibold text-lg mt-8 hidden shadow-lg">
             💝 Download this memory
         </button>
         
@@ -232,7 +259,6 @@
         const initialMirror = document.getElementById('initialMirror');
         const carouselContainer = document.getElementById('carouselContainer');
         const carouselTrack = document.getElementById('carouselTrack');
-        const typewriterText = document.getElementById('typewriterText');
         const downloadBtn = document.getElementById('downloadBtn');
         
         function unlockMemories() {
@@ -247,7 +273,6 @@
                     carouselContainer.classList.add('slide-in');
                     createCarousel();
                     downloadBtn.classList.remove('hidden');
-                    showTypewriter(memories[currentPhotoIndex].caption);
                 }, 500);
             }
         }
@@ -268,9 +293,14 @@
                 const item = document.createElement('div');
                 item.className = `carousel-item ${index === currentPhotoIndex ? 'active' : ''}`;
                 item.onclick = () => selectPhoto(index);
-                // UPDATED: Text caption removed from here, only image remains
+                
+                // Added caption-box here. It is inside the item, below the image (z-index wise),
+                // but styled with absolute position to slide up.
                 item.innerHTML = `
                     <img src="${memory.photo}" alt="Memory ${index + 1}">
+                    <div class="caption-box">
+                        <p>${memory.caption}</p>
+                    </div>
                 `;
                 carouselTrack.appendChild(item);
             });
@@ -283,7 +313,6 @@
                 const items = document.querySelectorAll('.carousel-item');
                 items.forEach((item, i) => item.classList.toggle('active', i === index));
                 updateCarouselPosition();
-                showTypewriter(memories[currentPhotoIndex].caption);
             }
         }
         
@@ -292,15 +321,6 @@
             const containerWidth = carouselContainer.offsetWidth;
             const offset = (containerWidth / 2) - (itemWidth / 2) - (currentPhotoIndex * itemWidth);
             carouselTrack.style.transform = `translateX(${offset}px)`;
-        }
-        
-        function showTypewriter(text) {
-            typewriterText.textContent = '';
-            typewriterText.classList.remove('typewriter');
-            setTimeout(() => {
-                typewriterText.textContent = text;
-                typewriterText.classList.add('typewriter');
-            }, 100);
         }
         
         downloadBtn.addEventListener('click', () => {
