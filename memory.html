@@ -23,9 +23,9 @@
         
         .floating-mirror {
             animation: float 4s ease-in-out infinite, glow 3s ease-in-out infinite;
-            backdrop-filter: blur(20px);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #fff0f5, #ffe4e1);
+            border: 4px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .sparkle {
@@ -94,7 +94,7 @@
             max-width: 1200px;
             margin: 0 auto;
             position: relative;
-            height: 500px; /* Increased height slightly */
+            height: 600px; /* Increased height to fit image + text box */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -110,80 +110,65 @@
         }
         
         .carousel-item {
-            flex: 0 0 300px;
-            height: 450px; /* Taller card to fit text box comfortably */
+            flex: 0 0 320px; /* Width of the card */
+            height: 520px;   /* Height of the card */
             border-radius: 20px;
             overflow: hidden;
             position: relative;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            backdrop-filter: blur(10px);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #ffffff; 
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column; /* Stacks image on top of text */
         }
         
+        /* Image Section */
         .carousel-item img {
             width: 100%;
-            height: 100%;
+            height: 320px; /* Fixed height for image */
             object-fit: cover;
-            transition: all 0.6s ease;
+            flex-shrink: 0;
         }
         
+        /* Text Section (The Slider) */
+        .text-slider-area {
+            flex-grow: 1;
+            background: #ffffff;
+            padding: 15px;
+            overflow-y: auto; /* This makes the text slide/scroll */
+            color: #4a4a4a;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        /* Custom Scrollbar for the text area */
+        .text-slider-area::-webkit-scrollbar {
+            width: 6px;
+        }
+        .text-slider-area::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+        .text-slider-area::-webkit-scrollbar-thumb {
+            background: #ffb6c1;
+            border-radius: 3px;
+        }
+
+        /* Inactive State */
         .carousel-item:not(.active) {
-            opacity: 0.3;
+            opacity: 0.5;
             transform: scale(0.85);
-            filter: blur(2px);
+            filter: grayscale(60%);
         }
         
+        /* Active State */
         .carousel-item.active {
             opacity: 1;
             transform: scale(1);
-            filter: blur(0);
-            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
-        }
-
-        /* NEW: Scrollable Caption Box Styles */
-        .caption-box {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40%; /* Takes up bottom 40% of card */
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(5px);
-            padding: 15px;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            transform: translateY(110%); /* Hidden by default (pushed down) */
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease;
-            overflow-y: auto; /* Enables vertical scrolling */
-            opacity: 0;
-            color: #333;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
-        }
-
-        /* Show caption box only when active */
-        .carousel-item.active .caption-box {
-            transform: translateY(0); /* Slides up */
-            opacity: 1;
-        }
-
-        /* Custom Pink Scrollbar for the caption box */
-        .caption-box::-webkit-scrollbar {
-            width: 6px;
-        }
-        .caption-box::-webkit-scrollbar-track {
-            background: rgba(255, 192, 203, 0.3);
-            border-radius: 3px;
-        }
-        .caption-box::-webkit-scrollbar-thumb {
-            background: #ff69b4;
-            border-radius: 3px;
-        }
-        .caption-box::-webkit-scrollbar-thumb:hover {
-            background: #ff1493;
+            filter: none;
+            box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
         }
 
         .slide-in { animation: slideIn 0.8s ease-out; }
@@ -202,13 +187,13 @@
         <div class="sparkle" style="bottom: 60%; left: 70%; animation-delay: 3.5s;"></div>
     </div>
     
-    <div class="flex flex-col items-center justify-center min-h-screen p-8">
-        <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 mb-8 text-center">
+    <div class="flex flex-col items-center justify-center min-h-screen p-4 md:p-8">
+        <h1 class="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600 mb-4 text-center">
             Mirror of Memories
         </h1>
         
         <div id="initialMirror" class="floating-mirror rounded-3xl p-8 cursor-pointer hover:scale-105 transition-transform duration-300" onclick="unlockMemories()">
-            <div class="w-80 h-80 md:w-96 md:h-96 relative overflow-hidden rounded-2xl bg-gradient-to-br from-pink-200 to-purple-200 flex items-center justify-center">
+            <div class="w-80 h-80 md:w-96 md:h-96 relative overflow-hidden rounded-2xl bg-white flex items-center justify-center">
                 <div class="text-center text-gray-600">
                     <div class="text-6xl mb-4">💕</div>
                     <p class="text-lg font-semibold">Click to unlock memories</p>
@@ -217,16 +202,16 @@
         </div>
         
         <div id="carouselContainer" class="carousel-container hidden">
-            <button id="arrowLeft" class="absolute left-2 md:left-10 z-10 bg-white bg-opacity-70 hover:bg-pink-200 text-pink-600 rounded-full p-3 shadow-lg transition-all duration-200">
+            <button id="arrowLeft" class="absolute left-0 md:left-4 z-10 bg-white hover:bg-pink-50 text-pink-600 rounded-full p-3 shadow-lg transition-all duration-200 border border-pink-100">
                 &#8592;
             </button>
-            <button id="arrowRight" class="absolute right-2 md:right-10 z-10 bg-white bg-opacity-70 hover:bg-pink-200 text-pink-600 rounded-full p-3 shadow-lg transition-all duration-200">
+            <button id="arrowRight" class="absolute right-0 md:right-4 z-10 bg-white hover:bg-pink-50 text-pink-600 rounded-full p-3 shadow-lg transition-all duration-200 border border-pink-100">
                 &#8594;
             </button>
             <div class="carousel-track" id="carouselTrack"></div>
         </div>
         
-        <button id="downloadBtn" class="download-btn text-white px-8 py-3 rounded-full font-semibold text-lg mt-8 hidden shadow-lg">
+        <button id="downloadBtn" class="download-btn text-white px-8 py-3 rounded-full font-semibold text-lg mt-4 hidden shadow-lg">
             💝 Download this memory
         </button>
         
@@ -294,11 +279,9 @@
                 item.className = `carousel-item ${index === currentPhotoIndex ? 'active' : ''}`;
                 item.onclick = () => selectPhoto(index);
                 
-                // Added caption-box here. It is inside the item, below the image (z-index wise),
-                // but styled with absolute position to slide up.
                 item.innerHTML = `
                     <img src="${memory.photo}" alt="Memory ${index + 1}">
-                    <div class="caption-box">
+                    <div class="text-slider-area">
                         <p>${memory.caption}</p>
                     </div>
                 `;
@@ -317,9 +300,9 @@
         }
         
         function updateCarouselPosition() {
-            const itemWidth = 320; 
+            const itemWidth = 340; // 320px width + 20px gap allowance
             const containerWidth = carouselContainer.offsetWidth;
-            const offset = (containerWidth / 2) - (itemWidth / 2) - (currentPhotoIndex * itemWidth);
+            const offset = (containerWidth / 2) - (320 / 2) - (currentPhotoIndex * itemWidth);
             carouselTrack.style.transform = `translateX(${offset}px)`;
         }
         
