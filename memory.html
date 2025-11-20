@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -145,7 +145,7 @@
         .slide-in { animation: slideIn 0.8s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- NEW SLIDER SCROLLBAR CSS --- */
+        /* Slider Scrollbar CSS */
         .custom-scrollbar::-webkit-scrollbar {
             width: 8px;
         }
@@ -223,7 +223,7 @@
             }, 700); 
         });
 
-        // Photos and captions data - QUOTES FIXED HERE
+        // Photos and captions data
         const memories = [
             { photo: 'pic1.jpg', caption: "That day I don't care coz I have you by my side but today I do as nobody and nothing can ever provide me with the strength and love you did." },
             { photo: 'pic2.jpg', caption: "Lying beside you and yapping illogical shit that's all my heart crave for !!" },
@@ -274,7 +274,7 @@
                 const item = document.createElement('div');
                 item.className = `carousel-item ${index === currentPhotoIndex ? 'active' : ''}`;
                 item.onclick = () => selectPhoto(index);
-                // NO TEXT INSIDE THE IMAGE HERE
+                // Text removed from inside the image
                 item.innerHTML = `
                     <img src="${memory.photo}" alt="Memory ${index + 1}">
                 `;
@@ -295,25 +295,23 @@
         
         function updateCarouselPosition() {
             const itemWidth = 300; 
-            const gap = 20;
             const containerWidth = carouselContainer.offsetWidth;
+            // Adjusted math to ensure centering works correctly with padding
             const offset = (containerWidth / 2) - (itemWidth / 2) - (currentPhotoIndex * (itemWidth + 20)); 
-            // Added padding adjustment
             const paddingOffset = 50; 
             carouselTrack.style.transform = `translateX(${offset - paddingOffset}px)`;
         }
         
         function updateCaption(text) {
-            // Simple update logic instead of typewriter
             captionText.style.opacity = '0';
             setTimeout(() => {
                 captionText.textContent = text;
                 captionText.style.opacity = '1';
-                // Reset scroll to top when changing text
+                // Reset slider to top when changing text
                 document.getElementById('textContainer').scrollTop = 0;
             }, 200);
         }
-        // Add transition to caption
+        
         captionText.style.transition = "opacity 0.3s ease";
         
         downloadBtn.addEventListener('click', () => {
