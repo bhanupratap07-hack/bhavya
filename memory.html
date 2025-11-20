@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -153,21 +153,7 @@
             box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
         }
         
-        .carousel-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-            color: white;
-            padding: 20px;
-            text-align: center;
-            z-index: 2;
-            transform: translateY(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .carousel-item.active .carousel-caption { transform: translateY(0); }
+        /* CSS for carousel caption on photo removed here */
         
         .slide-in { animation: slideIn 0.8s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
@@ -231,13 +217,13 @@
             }, 700); 
         });
 
-        // Photos and captions data - UPDATED FOR PNG FILES
+        // Photos and captions data
         const memories = [
-            { photo: 'pic1.jpg', caption: 'This smile… my forever favorite' },
-            { photo: 'pic2.jpg', caption: 'My Lifeline 🥰🧿' },
-            { photo: 'pic3.jpg', caption: 'My Lovely Sister 🌸🌸' },
-            { photo: 'pic4.jpg', caption: 'You and Always You 💕💕' },
-            { photo: 'pic5.jpg', caption: 'Forever and always, my heart 💓💓' }
+            { photo: 'pic1.jpg', caption: 'That day I don\'t care coz I have you by my side but today I do as nobody and nothing can ever provide me with the strength and love you did ' },
+            { photo: 'pic2.jpg', caption: 'Lying beside you and yapping illogical shit that\'s all my heart crave for !!' },
+            { photo: 'pic3.jpg', caption: 'Remeber when puchu left before my last birthday and you bringed a new one to console and cheer me up. This birthday I have lost something more and most precious, please bring her back ( this time the original one )' },
+            { photo: 'pic4.jpg', caption: 'This heart was unintentionally but like always with you everything has a meaning' },
+            { photo: 'pic5.jpg', caption: 'My forever favourite irrespective of distance, time and issues' }
         ];
         
         let currentPhotoIndex = 0;
@@ -282,9 +268,9 @@
                 const item = document.createElement('div');
                 item.className = `carousel-item ${index === currentPhotoIndex ? 'active' : ''}`;
                 item.onclick = () => selectPhoto(index);
+                // UPDATED: Text caption removed from here, only image remains
                 item.innerHTML = `
                     <img src="${memory.photo}" alt="Memory ${index + 1}">
-                    <div class="carousel-caption"><p class="text-sm font-medium">${memory.caption}</p></div>
                 `;
                 carouselTrack.appendChild(item);
             });
