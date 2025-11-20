@@ -6,6 +6,7 @@
     <title>Mirror of Memories</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* ANIMATIONS */
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-10px) rotate(1deg); }
@@ -87,7 +88,7 @@
             box-shadow: 0 5px 15px rgba(255, 105, 180, 0.5);
         }
         
-        /* Carousel Styles */
+        /* CAROUSEL STYLES */
         .carousel-container {
             perspective: 1000px;
             width: 100%;
@@ -145,7 +146,7 @@
         .slide-in { animation: slideIn 0.8s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Slider Scrollbar CSS */
+        /* TEXT SLIDER (SCROLLBAR) STYLES */
         .custom-scrollbar::-webkit-scrollbar {
             width: 8px;
         }
@@ -154,7 +155,7 @@
             border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #ff69b4;
+            background: #ff69b4; /* Pink slider */
             border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -198,14 +199,14 @@
             <div class="carousel-track" id="carouselTrack"></div>
         </div>
         
-        <div class="mt-8 w-full max-w-lg bg-white bg-opacity-30 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-50 shadow-lg">
+        <div class="mt-8 w-full max-w-lg bg-white bg-opacity-30 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-50 shadow-lg relative z-10">
             <div id="textContainer" class="h-32 overflow-y-auto custom-scrollbar text-center">
                 <p id="captionText" class="text-xl text-gray-800 font-medium leading-relaxed px-2">
                     </p>
             </div>
         </div>
         
-        <button id="downloadBtn" class="download-btn text-white px-8 py-3 rounded-full font-semibold text-lg mt-6 hidden shadow-lg">
+        <button id="downloadBtn" class="download-btn text-white px-8 py-3 rounded-full font-semibold text-lg mt-6 hidden shadow-lg relative z-10">
             💝 Download this memory
         </button>
         
@@ -223,13 +224,13 @@
             }, 700); 
         });
 
-        // Photos and captions data
+        // --- FIX: CHANGED .png TO .jpg HERE TO MATCH YOUR FILES ---
         const memories = [
             { photo: 'pic1.jpg', caption: "That day I don't care coz I have you by my side but today I do as nobody and nothing can ever provide me with the strength and love you did." },
             { photo: 'pic2.jpg', caption: "Lying beside you and yapping illogical shit that's all my heart crave for !!" },
-            { photo: 'pic3.png', caption: "Remember when puchu left before my last birthday and you bringed a new one to console and cheer me up. This birthday I have lost something more and most precious, please bring her back ( this time the original one )" },
-            { photo: 'pic4.png', caption: "This heart was unintentionally but like always with you everything has a meaning" },
-            { photo: 'pic5.png', caption: "My forever favourite irrespective of distance, time and issues" }
+            { photo: 'pic3.jpg', caption: "Remember when puchu left before my last birthday and you bringed a new one to console and cheer me up. This birthday I have lost something more and most precious, please bring her back ( this time the original one )" },
+            { photo: 'pic4.jpg', caption: "This heart was unintentionally but like always with you everything has a meaning" },
+            { photo: 'pic5.jpg', caption: "My forever favourite irrespective of distance, time and issues" }
         ];
         
         let currentPhotoIndex = 0;
@@ -274,10 +275,7 @@
                 const item = document.createElement('div');
                 item.className = `carousel-item ${index === currentPhotoIndex ? 'active' : ''}`;
                 item.onclick = () => selectPhoto(index);
-                // Text removed from inside the image
-                item.innerHTML = `
-                    <img src="${memory.photo}" alt="Memory ${index + 1}">
-                `;
+                item.innerHTML = `<img src="${memory.photo}" alt="Memory ${index + 1}">`;
                 carouselTrack.appendChild(item);
             });
             updateCarouselPosition();
@@ -296,7 +294,6 @@
         function updateCarouselPosition() {
             const itemWidth = 300; 
             const containerWidth = carouselContainer.offsetWidth;
-            // Adjusted math to ensure centering works correctly with padding
             const offset = (containerWidth / 2) - (itemWidth / 2) - (currentPhotoIndex * (itemWidth + 20)); 
             const paddingOffset = 50; 
             carouselTrack.style.transform = `translateX(${offset - paddingOffset}px)`;
@@ -307,7 +304,7 @@
             setTimeout(() => {
                 captionText.textContent = text;
                 captionText.style.opacity = '1';
-                // Reset slider to top when changing text
+                // Reset text slider to top when changing photo
                 document.getElementById('textContainer').scrollTop = 0;
             }, 200);
         }
@@ -327,6 +324,7 @@
             if (memoriesUnlocked) updateCarouselPosition();
         });
         
+        // Background sparkles
         function createSparkle() {
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle';
